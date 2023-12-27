@@ -20,19 +20,19 @@ passport.use(
   )
 );
 
-// request at /auth/google, when user click sign-up with google button transferring
-// the request to google server, to show emails screen
+// Requisição em /auth/google, quando o usuário clica em "Entrar com google", transfere
+// a requisição para o servidor do Google, para mostrar a tela de e-mails
 router.get(
     '/',
     passport.authenticate('google', { scope: ['profile', 'email'] })
   );
   
-  // URL Must be same as 'Authorized redirect URIs' field of OAuth client, i.e: /auth/google/callback
+  // A URL deve ser a mesma que a 'Authorized redirect URIs' no cliente OAuth, ou seja: /auth/google/callback
   router.get(
     '/callback',
     passport.authenticate('google', { failureRedirect: '/auth/google/error' }),
     (req, res) => {
-      res.redirect('/auth/google/success'); // Successful authentication, redirect success.
+      res.redirect('/auth/google/success'); // Autenticação bem-sucedida, redireciona para o success.
     }
   );
   
