@@ -19,18 +19,14 @@ passport.use(
                 provider: 'github',
             });
             if (!user) {
-                console.log('Adding new github user to DB..');
                 const user = new User({
                     accountId: profile.id,
                     name: profile.username,
                     provider: profile.provider,
                 });
                 await user.save();
-                // console.log(user);
                 return cb(null, profile);
             } else {
-                console.log('Github user already exist in DB..');
-                // console.log(profile);
                 return cb(null, profile);
             }
         }

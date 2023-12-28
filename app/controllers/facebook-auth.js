@@ -19,18 +19,14 @@ passport.use(
                 provider: 'facebook',
             });
             if (!user) {
-                console.log('Adding new facebook user to DB..');
                 const user = new User({
                     accountId: profile.id,
                     name: profile.displayName,
                     provider: profile.provider,
                 });
                 await user.save();
-                // console.log(user);
                 return cb(null, profile);
             } else {
-                console.log('Facebook User already exist in DB..');
-                // console.log(profile);
                 return cb(null, profile);
             }
         }
