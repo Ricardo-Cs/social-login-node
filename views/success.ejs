@@ -14,6 +14,10 @@
     <strong>Email</strong>: <%= user.emails[0].value %><br />
     <strong>Nome</strong>: <%= user.displayName %>
   </p>
+
+  <img src="<%= user.photos[0].value %>" alt="profile" />
+
+  <a href="/auth/google/signout"><span>Deslogar</span></a>
 </body>
 
 </html>
