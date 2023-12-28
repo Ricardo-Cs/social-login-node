@@ -9,10 +9,13 @@
 
 <body>
   <h1>Sucesso</h1>
+  <h2>
+    <span><%= user.provider %> Profile</span>
+  </h2>
   <p>
     <strong>Id</strong>: <%= user.id %><br />
-    <strong>Email</strong>: <%= user.emails[0].value %><br />
-    <strong>Nome</strong>: <%= user.displayName %>
+    <strong>Name</strong>: <%= user.displayName %><br />
+    <strong>Provider</strong>: <%= user.provider %>
   </p>
 </body>
 
