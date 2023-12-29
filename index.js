@@ -4,7 +4,6 @@ const app = express();
 const session = require('express-session');
 const authRouter = require('./app/controllers/google-auth');
 const githubRouter = require('./app/controllers/github-auth');
-const facebookRouter = require('./app/controllers/facebook-auth');
 const passport = require('passport');
 
 app.set('view engine', 'ejs');
@@ -36,6 +35,5 @@ app.get('/', (req, res) => {
 
 app.use('/auth/google', authRouter);
 app.use('/auth/github', githubRouter);
-app.use('/auth/facebook', facebookRouter);
 
 app.listen(3000, () => console.log('App is running on port 3000...'));

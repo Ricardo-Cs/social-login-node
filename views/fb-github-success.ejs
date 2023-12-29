@@ -16,9 +16,10 @@
     <strong>Id</strong>: <%= user.id %><br />
     <strong>Name</strong>: <%= user.displayName %><br />
     <strong>Provider</strong>: <%= user.provider %>
+    <img src="<%= user.avatarUrl %>" alt="<%= user.displayName %> Avatar" style="max-width: 100px; border-radius: 50%;" />
   </p>
 
-  <a href="/auth/facebook/signout"><span>Deslogar</span></a>
+  <a href="/auth/github/signout"><span>Deslogar</span></a>
 </body>
 
 </html>
