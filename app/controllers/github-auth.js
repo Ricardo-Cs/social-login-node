@@ -26,7 +26,7 @@ passport.use(
                         accountId: profile.id,
                         name: profile.username,
                         provider: profile.provider,
-                        avatarUrl: profile.photos[0].value, // Adiciona a URL do avatar
+                        avatarUrl: profile.photos[0].value,
                     });
                     await newUser.save();
                     return cb(null, profile);
@@ -46,7 +46,7 @@ router.get(
     '/callback',
     passport.authenticate('github', { failureRedirect: '/auth/github/error' }),
     (req, res) => {
-        // Successful authentication, redirect to success screen.
+        // Autenticação bem-sucedida, redireciona para tela de sucesso.
         res.redirect('/auth/github/success');
     }
 );
@@ -56,9 +56,9 @@ router.get('/success', (req, res) => {
         id: req.session.passport.user.id,
         displayName: req.session.passport.user.username,
         provider: req.session.passport.user.provider,
-        avatarUrl: req.session.passport.user.photos[0].value, // Adiciona a URL do avatar
+        avatarUrl: req.session.passport.user.photos[0].value,
     };
-    res.render('fb-github-success', { user: userInfo });
+    res.render('github-success', { user: userInfo });
 });
 
 router.get('/error', (req, res) => res.send('Error logging in via Github..'));

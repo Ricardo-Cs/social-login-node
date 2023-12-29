@@ -20,19 +20,16 @@ passport.use(
   )
 );
 
-// Requisição em /auth/google, quando o usuário clica em "Entrar com google", transfere
-// a requisição para o servidor do Google, para mostrar a tela de e-mails
 router.get(
   '/',
   passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
-// A URL deve ser a mesma que a 'Authorized redirect URIs' no cliente OAuth, ou seja: /auth/google/callback
 router.get(
   '/callback',
   passport.authenticate('google', { failureRedirect: '/auth/google/error' }),
   (req, res) => {
-    res.redirect('/auth/google/success'); // Autenticação bem-sucedida, redireciona para o success.
+    res.redirect('/auth/google/success'); // Autenticação bem-sucedida, redireciona para a tela de sucesso.
   }
 );
 
@@ -40,7 +37,7 @@ router.get('/success', async (req, res) => {
   const { failure, success } = await googleAuth.registerWithGoogle(userProfile);
   if (failure) console.log('Google user already exist in DB..');
   else console.log('Registering new Google user..');
-  res.render('success', { user: userProfile });
+  res.render('google-success', { user: userProfile });
 });
 
 router.get('/error', (req, res) => res.send('Error logging in via Google..'));

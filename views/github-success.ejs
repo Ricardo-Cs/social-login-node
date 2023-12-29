@@ -9,14 +9,11 @@
 
 <body>
   <h1>Sucesso</h1>
-  <h2>
-    <span><%= user.provider %> Profile</span>
-  </h2>
   <p>
     <strong>Id</strong>: <%= user.id %><br />
     <strong>Name</strong>: <%= user.displayName %><br />
-    <strong>Provider</strong>: <%= user.provider %>
-    <img src="<%= user.avatarUrl %>" alt="<%= user.displayName %> Avatar" style="max-width: 100px; border-radius: 50%;" />
+    <!-- <strong>Provider</strong>: <%= user.provider %> -->
+    <img src="<%= user.avatarUrl %>" alt="<%= user.displayName %> Avatar" style="max-width: 60px; border-radius: 50%;" />
   </p>
 
   <a href="/auth/github/signout"><span>Deslogar</span></a>
