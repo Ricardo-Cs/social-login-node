@@ -1,11 +1,11 @@
 const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
 const express = require('express');
-const User = require('../dal/models/user.model');
-const dotenv = require('dotenv');
-
+const githubAuthDal = require('../dal/github-auth.dal');
 const router = express.Router();
-dotenv.config();
+require('dotenv').config();
+
+let userProfile;
 
 passport.use(
     new GitHubStrategy(
@@ -14,68 +14,52 @@ passport.use(
             clientSecret: process.env.GITHUB_SECRET_KEY,
             callbackURL: process.env.GITHUB_CALLBACK_URL,
         },
-        async (accessToken, refreshToken, profile, cb) => {
-            try {
-                const user = await User.findOne({
-                    accountId: profile.id,
-                    provider: 'github',
-                });
-
-                if (!user) {
-                    const newUser = new User({
-                        accountId: profile.id,
-                        name: profile.username,
-                        provider: profile.provider,
-                        avatarUrl: profile.photos[0].value,
-                    });
-                    await newUser.save();
-                    return cb(null, profile);
-                } else {
-                    return cb(null, profile);
-                }
-            } catch (err) {
-                return cb(err, null);
-            }
+        function (accessToken, refreshToken, profile, done) {
+            userProfile = profile;
+            return done(null, userProfile);
         }
     )
 );
 
-router.get('/', passport.authenticate('github', { scope: ['user:email'] }));
+router.get(
+    '/',
+    passport.authenticate('github', { scope: ['user:email'] })
+);
 
 router.get(
     '/callback',
     passport.authenticate('github', { failureRedirect: '/auth/github/error' }),
-    (req, res) => {
-        // Autenticação bem-sucedida, redireciona para tela de sucesso.
-        res.redirect('/auth/github/success');
+    async (req, res) => {
+        try {
+            const { failure, success } = await githubAuthDal.registerWithGitHub(userProfile);
+            if (failure) {
+                console.log('GitHub user already exists in DB..');
+            } else {
+                console.log('Registering new GitHub user..');
+            }
+            res.redirect('/auth/github/success');
+        } catch (err) {
+            console.error('Error registering GitHub user:', err);
+            res.redirect('/auth/github/error');
+        }
     }
 );
 
 router.get('/success', (req, res) => {
-    const userInfo = {
-        id: req.session.passport.user.id,
-        displayName: req.session.passport.user.username,
-        provider: req.session.passport.user.provider,
-        avatarUrl: req.session.passport.user.photos[0].value,
-    };
-    res.render('github-success', { user: userInfo });
+    console.log(userProfile);
+    res.render('github-success', { user: userProfile });
 });
 
-router.get('/error', (req, res) => res.send('Error logging in via Github..'));
+router.get('/error', (req, res) => res.send('Error logging in via GitHub..'));
 
 router.get('/signout', (req, res) => {
     try {
         req.session.destroy(function (err) {
-            if (err) {
-                console.log('Error destroying session:', err);
-            } else {
-                console.log('Session destroyed.');
-            }
+            console.log('Session destroyed.');
         });
         res.render('auth');
     } catch (err) {
-        console.error('Failed to sign out GitHub user:', err);
-        res.status(400).send({ message: 'Failed to sign out GitHub user' });
+        res.status(400).send({ message: 'Failed to sign out user' });
     }
 });
 

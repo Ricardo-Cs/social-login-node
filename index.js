@@ -6,7 +6,10 @@ const authRouter = require('./app/controllers/google-auth');
 const githubRouter = require('./app/controllers/github-auth');
 const passport = require('passport');
 
+// Configura a view engine que será usada para renderizar as páginas HTML.
 app.set('view engine', 'ejs');
+// Configura o servidor para receber arquivos estáticos da pasta assets.
+app.use('/assets', express.static('assets'));
 
 connectToMongoDb();
 

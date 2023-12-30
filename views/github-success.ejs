@@ -12,8 +12,7 @@
   <p>
     <strong>Id</strong>: <%= user.id %><br />
     <strong>Name</strong>: <%= user.displayName %><br />
-    <!-- <strong>Provider</strong>: <%= user.provider %> -->
-    <img src="<%= user.avatarUrl %>" alt="<%= user.displayName %> Avatar" style="max-width: 60px; border-radius: 50%;" />
+    <img src="<%= user.photos[0].value %>" alt="<%= user.displayName %> Avatar" style="max-width: 60px; border-radius: 50%;" />
   </p>
 
   <a href="/auth/github/signout"><span>Deslogar</span></a>
